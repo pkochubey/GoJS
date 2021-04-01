@@ -1,11 +1,11 @@
 /*
-*  Copyright (C) 1998-2020 by Northwoods Software Corporation. All Rights Reserved.
+*  Copyright (C) 1998-2021 by Northwoods Software Corporation. All Rights Reserved.
 */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -107,6 +107,8 @@ var __extends = (this && this.__extends) || (function () {
                     }
                     else if (index === link.lastPickIndex - 1) {
                         link.insertPoint(index, link.getPoint(index).copy());
+                        if (index - 1 === link.firstPickIndex + 1)
+                            this.handle.segmentIndex = index - 1;
                     }
                 }
                 var behavior = this.getReshapingBehavior(this.handle);

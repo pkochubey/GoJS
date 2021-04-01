@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GoJS Commands -- Northwoods Software</title>
-  <!-- Copyright 1998-2020 by Northwoods Software Corporation. -->
+  <!-- Copyright 1998-2021 by Northwoods Software Corporation. -->
   <script src="../release/go.js"></script>
   <script src="goIntro.js"></script>
 </head>
@@ -184,7 +184,7 @@ You can use the <a>CommandHandler</a>'s "can..." predicates to enable or disable
     if (e.isTransactionFinished) enableAll();
   });
   // perform initial enablements after everything has settled down
-  setTimeout(enableAll, 1);
+  setTimeout(enableAll, 100);
 
   myDiagram = diagram;  // make the diagram accessible to button onclick handlers
 </pre>

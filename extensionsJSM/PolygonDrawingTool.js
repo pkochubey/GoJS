@@ -1,5 +1,5 @@
 /*
-*  Copyright (C) 1998-2020 by Northwoods Software Corporation. All Rights Reserved.
+*  Copyright (C) 1998-2021 by Northwoods Software Corporation. All Rights Reserved.
 */
 /*
 * This is an extension and not part of the main GoJS library.
@@ -83,9 +83,11 @@ export class PolygonDrawingTool extends go.Tool {
             val.name = 'SHAPE';
             const panel = this._temporaryShape.panel;
             if (panel !== null) {
-                panel.remove(this._temporaryShape);
+                if (panel !== null)
+                    panel.remove(this._temporaryShape);
                 this._temporaryShape = val;
-                panel.add(this._temporaryShape);
+                if (panel !== null)
+                    panel.add(this._temporaryShape);
             }
         }
     }

@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Leaflet.js and GoJS</title>
-  <!-- Copyright 1998-2020 by Northwoods Software Corporation. -->
+  <!-- Copyright 1998-2021 by Northwoods Software Corporation. -->
   <meta name="description" content="A map integrating a GoJS Diagram and the Leaflet mapping library." />
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -44,7 +44,7 @@
         accessToken: "pk.eyJ1IjoiZ29qcyIsImEiOiJjaXppcnNkbDgwMzQ3MnFsNDFnY2phb2QwIn0.7AuVKrWdxQnJxa_W7qC3-w"
       }).addTo(myLeafletMap);
 
-      myLeafletMap.on("move", function(e) {
+      myLeafletMap.on("moveend", function(e) {
         myUpdatingGoJS = true;
         myDiagram.updateAllTargetBindings("latlong"); // Without virtualization this can be slow if there are many nodes
         myDiagram.redraw(); // At the expense of performance, this will make sure GoJS positions are updated immediately

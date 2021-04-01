@@ -1,9 +1,9 @@
 /*
- * Type definitions for GoJS v2.1.30
+ * Type definitions for GoJS v2.1.38
  * Project: https://gojs.net
  * Definitions by: Northwoods Software <https://github.com/NorthwoodsSoftware>
  * Definitions: https://github.com/NorthwoodsSoftware/GoJS
- * Copyright (C) 1998-2020 by Northwoods Software Corporation.
+ * Copyright (C) 1998-2021 by Northwoods Software Corporation.
  * This requires TypeScript v2.8 or later.
  */
 
@@ -1415,6 +1415,7 @@ export class Point {
      * @param {number} b2x
      * @param {number} b2y
      * @return {boolean} True if the two given finite line segments intersect with each other, false otherwise.
+     * @since 2.2
      */
     static intersectingLineSegments(a1x: number, a1y: number, a2x: number, a2y: number, b1x: number, b1y: number, b2x: number, b2y: number): boolean;
     /**
@@ -1964,6 +1965,7 @@ export class Rect {
      * @param {number} p2x The X coordinate of other end of the line segment.
      * @param {number} p2y The Y coordinate of other end of the line segment.
      * @return {boolean} True if the given finite line segment intersects with the given rectangular area, false otherwise.
+     * @since 2.2
      */
     static intersectsLineSegment(x: number, y: number, w: number, h: number, p1x: number, p1y: number, p2x: number, p2y: number): boolean;
     /**
@@ -2567,6 +2569,7 @@ export class Geometry {
      * Construct an empty Geometry.
      * The geometry type must be one of the following values:
      * Geometry.Line, Geometry.Ellipse, Geometry.Rectangle, Geometry.Path.
+     * The default type is Geometry.Path.
      */
     constructor(type?: EnumValue);
     /**
@@ -2706,9 +2709,11 @@ export class Geometry {
     rotate(angle: number, x?: number, y?: number): Geometry;
     /**
      * Undocumented.
+     * Returns true if the Geometry contains the point.
      * @param {Point} p in local geometry coordinates
      * @param {number=} sw half the stroke width that a Shape has or that you want to pretend it has
      * @return {boolean}
+     * @since 2.2
      */
     containsPoint(p: Point, sw?: number): boolean;
     /**
@@ -2716,18 +2721,21 @@ export class Geometry {
      * @param {number} fraction A fractional amount between 0 and 1, inclusive.
      * @param {Point=} result an optional Point that is modified and returned; otherwise it allocates and returns a new Point.
      * @return {Point} the Point, in local coordinates, of the fractional distance along the path.
+     * @since 2.1
      */
     getPointAlongPath(fraction: number, result?: Point): Point;
     /**
      * Returns the slope expressed as an angle at the fractional distance (0-1) along this Geometry's path, in local coordinates.
      * @param {number} fraction A fractional amount between 0 and 1, inclusive.
      * @return {number}
+     * @since 2.1
      */
     getAngleAlongPath(fraction: number): number;
     /**
      * Returns the fractional distance (0-1) along this Geometry's path for a nearby point.
      * @param {Point} pt A Point, in local coordinates, near this Geometry.
      * @return {number} A fractional amount between 0 and 1, inclusive.
+     * @since 2.1
      */
     getFractionForPoint(pt: Point): number;
     /**
@@ -3589,11 +3597,11 @@ export class DiagramEvent {
  */
 export type DiagramEventHandler = (e: DiagramEvent) => void;
 /**
- * (Undocumented, internal interface)
+ * A TypeScript type listing all of the supported DiagramEvent names.
  */
 export type DiagramEventName = 'InitialAnimationStarting' | 'AnimationStarting' | 'AnimationFinished' | 'BackgroundSingleClicked' | 'BackgroundDoubleClicked' | 'BackgroundContextClicked' | 'ChangingSelection' | 'ChangedSelection' | 'ClipboardChanged' | 'ClipboardPasted' | 'DocumentBoundsChanged' | 'ExternalObjectsDropped' | 'GainedFocus' | 'InitialLayoutCompleted' | 'LayoutCompleted' | 'LinkDrawn' | 'LinkRelinked' | 'LinkReshaped' | 'LostFocus' | 'Modified' | 'ObjectSingleClicked' | 'ObjectDoubleClicked' | 'ObjectContextClicked' | 'PartCreated' | 'PartResized' | 'PartRotated' | 'SelectionMoved' | 'SelectionCopied' | 'SelectionDeleted' | 'SelectionDeleting' | 'SelectionGrouped' | 'SelectionUngrouped' | 'SubGraphCollapsed' | 'SubGraphExpanded' | 'TextEdited' | 'TreeCollapsed' | 'TreeExpanded' | 'ViewportBoundsChanged' | 'InvalidateDraw';
 /**
- * (Undocumented, internal interface)
+ * A TypeScript type for helping to declare GraphObject.make.
  */
 export interface DiagramEventsInterface {
     AnimationStarting?: DiagramEventHandler;
@@ -3965,6 +3973,11 @@ export class Transaction {
      */
     redo(): void;
     /**
+     * Undocumented and experimental.
+     * Remove all but the first and last Property ChangedEvents for each property for each object.
+     */
+    optimize(): void;
+    /**
      * This read-only property returns the list of ChangedEvents.
      * The changes are stored in order of occurrence.
      *
@@ -4317,23 +4330,6 @@ export class UndoManager {
      * You should not modify this List.
      */
     readonly nestedTransactionNames: List<string>;
-    /**
-     * Undocumented.
-     */
-    isPendingClear: boolean;
-    /**
-     * Undocumented.
-     */
-    isPendingUnmodified: boolean;
-    /**
-     * Undocumented.
-     * Gets or sets whether the transaction should be considered nested, even if transactionLevel is zero
-     */
-    isInternalTransaction: boolean;
-    /**
-     * Undocumented.
-     */
-    readonly isJustDiscarded: boolean;
 }
 /**
  * Tools handle mouse, keyboard, and touch events.
@@ -5370,7 +5366,7 @@ export class ToolManager extends Tool {
      *
      * You can disable this tool by setting its Tool#isEnabled property to false.
      */
-    rotatingTool: Tool;
+    rotatingTool: RotatingTool;
     /**
      * Gets or sets the mode-less LinkingTool, normally one of the #mouseMoveTools.
      *
@@ -5658,19 +5654,25 @@ export class DraggingTool extends Tool {
      * This property is a convenience getter/setter, and sets a value on dragOptions.
      */
     dragsTree: boolean;
-    /** @hidden
+    /**
+     * Undocumented.
      * The cursor to show when a drop is allowed and will result in a copy.
      * This defaults to 'copy'.
+     * @since 2.2
      */
     copyCursor: string;
-    /** @hidden
+    /**
+     * Undocumented.
      * The cursor to show when a drop is allowed and will result in a move.
      * This defaults to the empty string, which refers to the Diagram#defaultCursor.
+     * @since 2.2
      */
     moveCursor: string;
-    /** @hidden
+    /**
+     * Undocumented.
      * The cursor to show when a drop is not allowed.
      * This defaults to 'no-drop'.
+     * @since 2.2
      */
     nodropCursor: string;
     /**
@@ -5696,6 +5698,7 @@ export class DraggingTool extends Tool {
      */
     draggedParts: Map<Part, DraggingInfo> | null;
     /**
+     * Undocumented.
      * This read-only property returns a Set that holds all of the Parts that are currently being dragged for either copying or moving.
      * @return {Set.<Part>} Returns the Map#toKeySet of either #copiedParts or #draggedParts, or else an empty Set.
      */
@@ -5968,9 +5971,11 @@ export abstract class LinkingBaseTool extends Tool {
      * @since 1.3
      */
     isUnconnectedLinkValid: boolean;
-    /** @hidden
+    /**
+     * Undocumented.
      * Gets or sets the cursor used during the linking or relinking operation.
      * This defaults to 'pointer'.
+     * @since 2.2
      */
     linkingCursor: string;
     /**
@@ -6254,7 +6259,7 @@ export abstract class LinkingBaseTool extends Tool {
      * nor may it change the validity of any potential link connection.
      * @since 1.2
      */
-    portTargeted: ((node: Node, port: GraphObject, tempNode: Node, tempPort: GraphObject, toEnd: boolean) => void) | null;
+    portTargeted: ((node: Node | null, port: GraphObject | null, tempNode: Node, tempPort: GraphObject, toEnd: boolean) => void) | null;
 }
 /**
  * The LinkingTool lets a user draw a new Link between two ports,
@@ -8047,7 +8052,7 @@ export class ContextMenuTool extends Tool {
      */
     constructor();
     /**
-     * Return true if it's a mouse right click that hasn't moved Tool#isBeyondDragSize
+     * Return true if it's a single mouse right click that hasn't moved Tool#isBeyondDragSize
      * and that is on a GraphObject with a GraphObject#contextMenu.
      * This is also true if the mouse right click is in the diagram background
      * and the diagram's Diagram#contextMenu is non-null.
@@ -8427,6 +8432,30 @@ export class TextEditingTool extends Tool {
      */
     acceptText(reason: EnumValue): void;
     /**
+     * Call the #textBlock's TextBlock#errorFunction, if there is one.
+     * This is called only when the #isValidText method returned false.
+     * The value of #state will be StateInvalid.
+     * When this method returns, the text editor will be shown again.
+     * This method may be overridden.
+     * @expose
+     * @param oldstring
+     * @param newstring
+     * @since 2.1
+     */
+    doError(oldstring: string, newstring: string): void;
+    /**
+     * Call the #textBlock's TextBlock#textEdited event handler, if there is one.
+     * This is called just after the TextBlock#text has been set to the new string value.
+     * When this method returns, this tool raises the "TextEdited" DiagramEvent
+     * and commits the transaction.
+     * This method may be overridden.
+     * @expose
+     * @param oldstring
+     * @param newstring
+     * @since 2.1
+     */
+    doSuccess(oldstring: string, newstring: string): void;
+    /**
      * Release the mouse.
      *
      * If the #currentTextEditor is an HTMLInfo, this calls HTMLInfo#hide.
@@ -8525,11 +8554,13 @@ export class AnimationManager {
      */
     readonly animationReasons: Set<string>;
     /**
-     * This method is passed the reason the animation is to begin,
+     * This method is passed the reason a default animation is to begin,
      * and must return true or false based on whether or not the animation is to be allowed.
      * Returning true means the animation will occur, returning false will stop the animation's setup.
      *
      * By default, this method always returns true.
+     * Setting this to a function that always returns false will disable all default animations,
+     * but allow other animations, such as AnimationTriggers, to run.
      *
      * These are the possible reasons GoJS will begin an animation:
      * ```md
@@ -8550,10 +8581,15 @@ export class AnimationManager {
      * Example usage:
      *
      * ```js
-     * // disallow expand/collapse animations, but allow all others
+     * // disallow expand/collapse animations, but allow all other default animations:
      * myDiagram.animationManager.canStart = function(reason) {
      *   if (reason === "Expand Tree") return false;
      *   return true;
+     * }
+     *
+     * // disallow all default animations:
+     * myDiagram.animationManager.canStart = function(reason) {
+     *   return false;
      * }
      * ```
      * @param {string} reason Reason for starting the animation
@@ -8577,11 +8613,15 @@ export class AnimationManager {
      * The default value is true.
      * Setting this to false does not stop an animation, it only stops future animations.
      * To stop any ongoing animation, use #stopAnimation.
+     * To disable only the default animations, set #canStart to a function that always returns `false`.
+     *
      * Setting this property does not raise any events.
+     * @see #canStart
      */
     isEnabled: boolean;
     /**
-     * Gets or sets the default duration, in milliseconds, used as the duration for animations that have their Animation#duration set to `NaN`.
+     * Gets or sets the default duration, in milliseconds, used as the duration for the #defaultAnimation
+     * and for animations that have their Animation#duration set to `NaN`.
      *
      * Typically these values are short. The default value is 600 milliseconds.
      * The value must be a number greater than or equal to 1.
@@ -8591,7 +8631,8 @@ export class AnimationManager {
      */
     duration: number;
     /**
-     * This read-only property is true when the animation manger is currently animating.
+     * This read-only property is true when the animation manger is currently animating any animation,
+     * including the #defaultAnimation.
      *
      * This value cannot be set, but animation can be stopped by calling #stopAnimation,
      * and it can be prevented by setting #isEnabled.
@@ -8601,11 +8642,11 @@ export class AnimationManager {
      * This read-only property is true when the animation manger is in the middle of an animation tick.
      * Animation only operates on GraphObjects during ticks, but code outside of AnimationManager's control may execute between ticks.
      *
-     * isTicking can only be true when #isAnimating is also true.
+     * `isTicking` can only be true when #isAnimating is also true.
      */
     readonly isTicking: boolean;
     /**
-     * Gets or sets whether an animation is performed on an initial layout.
+     * Gets or sets whether a default animation is performed on an initial layout.
      *
      * The default value is true.
      * Changing the value does not affect any ongoing animation.
@@ -8614,7 +8655,7 @@ export class AnimationManager {
      */
     isInitial: boolean;
     /**
-     * This read-only property gets the Animation that carries out default GoJS animations.
+     * This read-only property gets the Animation that carries out the default built-in GoJS animations.
      * This animation is usually only referenced to modify default animation properties,
      * such as the Animation#easing or Animation#duration.
      *
@@ -8628,7 +8669,7 @@ export class AnimationManager {
      */
     readonly defaultAnimation: Animation;
     /**
-     * Gets the set of currently animating Animations being managed by this AnimationManager.
+     * Gets the set of currently animating Animations being managed by this AnimationManager, including any running #defaultAnimation.
      * @since 2.1
      */
     readonly activeAnimations: Set<Animation>;
@@ -9014,7 +9055,8 @@ export class Animation {
  */
 export class AnimationTrigger {
     /**
-     * This constructor creates an AnimationTrigger. These are typically constructed within Part templates. Using GraphObject.make it might look like:
+     * This constructor creates an AnimationTrigger. These are typically constructed within Part templates.
+     * Using GraphObject.make it might look like:
      *
      * ```js
      *  var $ = go.GraphObject.make;
@@ -9032,7 +9074,7 @@ export class AnimationTrigger {
      *   This should not be the empty string.
      * @param {Object=} animationSettings An optional Object describing properties to set on animations created by this AnimationTrigger.
      *   See the #animationSettings property for detail.
-     *   If set this also defaults the #startCondition to AnimationTrigger.Immediate.
+     *   If specified, this also sets the #startCondition to AnimationTrigger.Immediate.
      * @param {EnumValue=} startCondition An optional EnumValue to set the #startCondition property.
      */
     constructor(propertyName: string, animationSettings?: {
@@ -9072,9 +9114,11 @@ export class AnimationTrigger {
      */
     propertyName: string;
     /**
-     * Gets or sets the settings that this trigger should set on any Animations it creates
-     * if the #startCondition is AnimationTrigger.Immediate. Immediate triggers create a new Animation with each triggering,
-     * and apply these settings to that Animation.
+     * These settings are only used if the #startCondition is AnimationTrigger.Immediate.
+     * Creating a new AnimationTrigger with animationSettings in the constructor automatically sets #startCondition to AnimationTrigger.Immediate
+     *
+     * This gets or sets the settings for any Animations this trigger creates.
+     * Immediate triggers create a new Animation with each triggering, and apply these settings to that Animation.
      *
      * This can be set to an object with a subset of possible Animation settings. The default value is `null`, which keeps default Animation settings.
      *
@@ -9105,12 +9149,12 @@ export class AnimationTrigger {
      * It is useful for the startCondition to be AnimationTrigger.Immediate when changing GraphObject properties
      * on GraphObject#mouseEnter or GraphObject#mouseLeave.
      * It is useful for the startCondition  to be AnimationTrigger.Bundled when changing several GraphObject properties together,
-     * such as when highlighting multiple parts, on selection changes, and during transactions.
+     * such as when highlighting multiple parts, on selection changes, and during transactions, or when performance is a consideration.
      *
      * These behaviors can be set with the values AnimationTrigger.Immediate and AnimationTrigger.Bundled, respectively.
      * The default value, AnimationTrigger.Default, attempts to infer which is best:
      * It will start immediately if there is no ongoing transaction
-     * or if Diagram#skipsUndoManager is true.
+     * or if Diagram#skipsUndoManager is true, and otherwise bundle them.
      */
     startCondition: EnumValue;
     /**
@@ -9321,6 +9365,13 @@ export class Layer {
      * @see GraphObject#pickable
      */
     pickable: boolean;
+    /**
+     * Undocumented.
+     * Gets or sets whether or not a layer is included in the documentBounds computation.
+     * Default value is true unless before v3.0 you set isTemporary to true.
+     * @since 2.2
+     */
+    isInDocumentBounds: boolean;
     /**
      * Gets or sets whether the user may copy objects in this layer.
      * The initial value is true.
@@ -9644,10 +9695,12 @@ export class Diagram {
     clear(): void;
     /**
      * Undocumented
+     * Call #clear and also restore the templates, layers, layout and various Diagram properties to their original state.
      */
     reset(): void;
     /**
      * @expose
+     * Undocumented.
      * Used in Diagram constructor setup, this computes the pixel width of the scrollbars
      * @param {HTMLElement=} elem
      */
@@ -9980,6 +10033,7 @@ export class Diagram {
      */
     findObjectsNear<T extends GraphObject, S extends List<T> | Set<T> = Set<T>>(p: Point, dist: number, navig?: ((a: GraphObject) => (T | null)) | null, pred?: ((a: T) => boolean) | null, partialInclusion?: boolean | S, coll?: S): S;
     /**
+     * Undocumented.
      * Requests that the Diagram updates its #documentBounds in the near-future.
      */
     invalidateDocumentBounds(): void;
@@ -9987,7 +10041,7 @@ export class Diagram {
      * Undocumented
      *
      * Invalidates all non-layout diagram state and forces an immediate redraw.
-     * Because this can be very inefficent, to discourage its use, it remains an undocumented part of the API.
+     * Because this can be very inefficent, to discourage its use it remains an undocumented part of the API.
      */
     redraw(): void;
     /**
@@ -11581,7 +11635,7 @@ export class Diagram {
      *
      * It is uncommon to call this method outside of customization.
      * For efficiency, do not call this method unnecessarily.
-     * @since 2.1
+     * @since 2.1.30
      * @see Part#ensureBounds
      */
     ensureBounds(): void;
@@ -11879,6 +11933,7 @@ export class Diagram {
      */
     raiseDiagramEvent(name: DiagramEventName, obj?: ObjectData, param?: any): void;
     /**
+     * Undocumented.
      * Gets or sets number of milliseconds between autoscroll events.
      * The default value is 250.
      */
@@ -11948,6 +12003,7 @@ export class Diagram {
      */
     makeSvg(options?: SvgRendererOptions): SVGElement;
     /**
+     * Undocumented.
      * Add a renderer to the Diagram. This property is only used when building GoJS from source.
      *
      * When building from source, to include SVG rendering functionality for Diagram#makeSvg,
@@ -12358,15 +12414,16 @@ export class Overview extends Diagram {
      * Setting this to false may help improve drawing performance.
      *
      * Setting this property does not notify about any changed event.
+     * @since 2.2
      */
     drawsGrid: boolean;
     /**
-     * Undocumented.
      * Gets or sets how long it waits before updating, in milliseconds.
      * The default value is zero.
      * Any new value must be a non-negative number.
      *
      * Setting this property does not notify about any changed event.
+     * @since 2.2
      */
     updateDelay: number;
 }
@@ -13242,6 +13299,17 @@ export class CommandHandler {
      * @since 1.1
      */
     zoomFactor: number;
+    /**
+     * Undocumented.
+     * Gets or sets whether the #zoomToFit command ever restores the previous
+     * Diagram scale and position.
+     * When this property is false, this command always calls Diagram#zoomToFit.
+     *
+     * The default value is true.
+     * Setting this property does not raise any events.
+     * @since 2.2
+     */
+    isZoomToFitRestoreEnabled: boolean;
     /**
      * Find the actual collection of nodes and links to be moved or copied,
      * given an initial collection.
@@ -15165,6 +15233,10 @@ export abstract class GraphObject {
      */
     setProperties(props: ObjectData): void;
     /**
+     * Undocumented
+     */
+    trigger(trigger: AnimationTrigger): void;
+    /**
      * This static function builds an object given its class and additional arguments
      * providing initial properties or GraphObjects that become Panel elements.
      *
@@ -15640,6 +15712,7 @@ export class Brush {
 export abstract class PanelLayout {
     constructor();
     /**
+     * Undocumented
      */
     readonly classType: Function;
     /**
@@ -16341,9 +16414,14 @@ export class Panel extends GraphObject {
      * Undocumented.
      * Make a deep copy of this Panel and allow it to be a template.
      * This makes copies of Bindings, unlike the regular copy().
+     * Pass true as the argument in order to freeze the Bindings,
+     * allowing it to operate efficiently as a template.
+     * A false value (which is the default) allows further additions/modifications
+     * of the bindings in the copied panel.
+     * @param {boolean=} freeze whether to freeze the Bindings in the copy; default is false
      * @return {Panel}
      */
-    copyTemplate(): Panel;
+    copyTemplate(freeze?: boolean): Panel;
     /**
      * Re-evaluate all data bindings on this panel,
      * in order to assign new property values to the GraphObjects in this visual tree
@@ -16885,6 +16963,10 @@ export class RowColumnDefinition {
      * @see #sizing
      */
     actual: number;
+    /**
+     * Undocumented
+     */
+    measured: number;
     /**
      * This read-only property returns the total arranged row height or column width, after arrangement, in local coordinates.
      * This value gives the #actual size plus the #separatorPadding and #separatorStrokeWidth.
@@ -19317,10 +19399,10 @@ export class Adornment extends Part {
  *   - GraphObject#fromLinkableSelfNode, GraphObject#toLinkableSelfNode
  *   - GraphObject#fromMaxLinks, GraphObject#toMaxLinks
  *
- * The "...Spot" and "...Length" and "...Direction" properties control the position and routing of links at a port.
+ * The "...Spot" and "...Length" properties control the position and routing of links at a port.
  * The "...Linkable..." and "...MaxLinks" properties control whether or not users can draw a new link
  * or reconnect an existing link from or to a port.
- * (The "...Spot" and "...Length" and "...Direction" properties also exist on Link, to override for a particular
+ * (The "...Spot" and "...Length" properties also exist on Link, to override for a particular
  * link the default values that come from a port element.)
  * <p class="boxread">
  * For a more general discussion of link points, see <a href="../../intro/connectionPoints.html">Introduction to Link Connection Points</a>.
@@ -19414,6 +19496,8 @@ export class Node extends Part {
     invalidateConnectedLinks(ignore?: Set<Part>): void;
     /**
      * Gets or sets how link points are computed when the port spot is a "side" spot.
+     * The value must be one of Node.SpreadingNone|SpreadingNone,
+     * Node.SpreadingEvenly|SpreadingEvenly, Node.SpreadingPacked|SpreadingPacked.
      * The default value is Node.SpreadingEvenly.
      * @since 1.5
      */
@@ -19468,6 +19552,7 @@ export class Node extends Part {
      * Return a collection of Links that connect with this Node or any in its subtree, excluding any isTreeLink Links.
      * For trees this is the analog of Group#findExternalLinksConnected for Groups.
      * @return {Iterator.<Link>}
+     * @since 2.2
      */
     findExternalTreeLinksConnected(): Iterator<Link>;
     /**
@@ -19989,19 +20074,6 @@ export class Group extends Node {
      */
     constructor(type?: PanelLayout);
     /**
-     * Measures if needed to make sure the GraphObject#measuredBounds and GraphObject#naturalBounds are all real numbers,
-     * primarily to get the actual width and height.
-     * GraphObject#actualBounds will get a real width and height, but the x and y values may continue to be `NaN`
-     * if they were that way beforehand.
-     *
-     * This is sometimes necessary to call when defining custom layouts or implementing virtualization,
-     * so that it can work with the actual size of the nodes.
-     *
-     * For efficiency, do not call this method unnecessarily.
-     * @since 1.6
-     */
-    ensureBounds(): void;
-    /**
      * This read-only property returns a Placeholder that this group may contain in its visual tree.
      */
     readonly placeholder: Placeholder | null;
@@ -20258,6 +20330,7 @@ export class Placeholder extends GraphObject {
      */
     constructor();
     /**
+     * Undocumented.
      * This is only called when the Placeholder is inside a Group.
      * Normally this just returns the result of #computeMemberBounds expanded by the #padding.
      * However, if Group#computesBoundsAfterDrag is true,
@@ -20270,6 +20343,7 @@ export class Placeholder extends GraphObject {
      */
     protected computeBorder(result: Rect): Rect;
     /**
+     * Undocumented.
      * Compute the union of the Bounds of this Placeholder's parent's Group.memberParts.
      * If there are no members, this returns a Rect with Width and Height of zero
      * and an X and Y that are this panel's original location in document coordinates.
@@ -20943,16 +21017,19 @@ export class Link extends Part {
      */
     clearPoints(): void;
     /**
+     * Undocumented.
      * Allow calls to #setPoint, #addPoint, #insertPoint,
      * #removePoint, and #clearPoints.
      * You must call #commitRoute when you are done modifying the route.
      */
     startRoute(): void;
     /**
+     * Undocumented.
      * Call this method after a call to #startRoute and calls to methods that modify the route.
      */
     commitRoute(): void;
     /**
+     * Undocumented.
      * Call this method instead of #commitRoute if you need to cancel changes to the route.
      */
     rollbackRoute(): void;
@@ -21119,6 +21196,7 @@ export class Link extends Part {
      */
     readonly isOrthogonal: boolean;
     /**
+     * Undocumented.
      * This read-only property is true when the routing tries to be smart about not overlapping other parts.
      */
     readonly isAvoiding: boolean;
@@ -21199,6 +21277,7 @@ export class Link extends Part {
      */
     hasCurviness(): boolean;
     /**
+     * Undocumented.
      * This method is called by #computePoints when the link is orthogonal
      * and at least one port has a link spot that is not Spot#isNoSpot.
      *
@@ -21284,7 +21363,8 @@ export class Link extends Part {
      */
     adjusting: EnumValue;
     /**
-     * Returns the #adjusting value, unless this Link's Diagram is animating, then it will return Link.End|End
+     * Returns the #adjusting value, unless this Link's Diagram is animating and the routing is AvoidsNodes --
+     * then it will return Link.End|End
      *
      * This method may be overridden.
      * Please read the Introduction page on <a href="../../intro/extensions.html">Extensions</a> for how to override methods and how to call this base method.
@@ -22591,6 +22671,10 @@ export class Model {
      *     }
      *   });
      * ```
+     *
+     * Caution: don't call JSON.stringify on the resulting object, because that will not properly handle any instances of
+     * JavaScript classes that are referenced by the object's properties.
+     * Instead call #toIncrementalJson, which will produce a more compact textual serialization.
      * @param {ChangedEvent} e a Transaction ChangedEvent for which ChangedEvent#isTransactionFinished is true
      * @return {IncrementalData} returns either null if no changes occured, or an object containing incremental model changes for the given Transaction
      * @see #toIncrementalJson
@@ -22604,14 +22688,16 @@ export class Model {
      * By default, this method will make deep clones of arrays and JavaScript objects and maintain any shared or cyclic references.
      * It will properly copy any `Date` or `RegExp` object, and will call a `copy` function on any object where one exists.
      * It also handles certain GoJS classes: `Point`, `Size`, `Rect`, `Margin`, `Spot`, `List`, `Set`, and `Map`.
+     * It will not handle instances of `Diagram`, `Layer`, `GraphObject`, `Tool`, `CommandHandler`, `AnimationManager` or subclasses or related classes.
      *
      * This method may be overridden.
      * Please read the Introduction page on <a href="../../intro/extensions.html">Extensions</a> for how to override methods and how to call this base method.
      * Only override this method when the default behavior doesn't suit the data.
-     * When cloning objects, we suggest skipping the `__gohashid` property.
+     * When cloning objects, we recommend skipping the `__gohashid` property, which is used internally.
      * @expose
      * @param {T} obj
      * @return {T}
+     * @since 2.1
      */
     cloneDeep<T>(obj: T): T;
     /**
@@ -23125,6 +23211,7 @@ export class Model {
      */
     mergeNodeDataArray(arr: Array<ObjectData>): void;
     /**
+     * Undocumented.
      * @param {string|number=} key
      */
     clearUnresolvedReferences(key?: Key): void;
@@ -25063,6 +25150,7 @@ export class ForceDirectedLayout extends Layout {
      */
     addComments(v: ForceDirectedVertex): void;
     /**
+     * Undocumented.
      * Move the vertex by its ForceDirectedVertex.forceX and ForceDirectedVertex.forceY.
      * Return the square of the distance moved.
      * This can be overridden in order to constrain the vertex's actual movement.

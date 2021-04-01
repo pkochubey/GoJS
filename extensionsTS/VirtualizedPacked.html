@@ -2,14 +2,14 @@
 <html>
 <head>
   <title>Virtualized Packed Groups Layout</title>
-  <!-- Copyright 1998-2020 by Northwoods Software Corporation. -->
+  <!-- Copyright 1998-2021 by Northwoods Software Corporation. -->
   <meta name="description" content="Quickly layout and show part of a large graph of nested groups." />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="../samples/assets/require.js"></script>
   <script src="../assets/js/goSamples.js"></script> <!-- this is only for the GoJS Samples framework -->
   <script id="code">
   function init() {
-    require(["../release/go", "./VirtualizedPackedLayout"], function(go, mod) {
+    require(["../release/go.js", "./VirtualizedPackedLayout"], function(go, mod) {
       if (window.goSamples) window.goSamples();  // init for these samples -- you don't need to call this
 
       var VirtualizedPackedLayout = mod.VirtualizedPackedLayout;

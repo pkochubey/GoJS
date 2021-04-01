@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Minimal SVG Download</title>
-  <!-- Copyright 1998-2020 by Northwoods Software Corporation. -->
+  <!-- Copyright 1998-2021 by Northwoods Software Corporation. -->
   <meta name="description" content="Minimal, showing SVG rendering and download with Diagram.makeSvg." />
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -53,10 +53,7 @@
     }
 
     // When the blob is complete, make an anchor tag for it and use the tag to initiate a download
-    // Works in:
-    // * Chrome
-    // * IE11, Edge
-    // * Firefox
+    // Works in Chrome, Firefox, Safari, Edge, IE11
     function myCallback(blob) {
       var url = window.URL.createObjectURL(blob);
       var filename = "mySVGFile.svg";

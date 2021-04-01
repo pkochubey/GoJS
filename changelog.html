@@ -7,7 +7,7 @@
   <meta name="description" content="GoJS changelog." />
   <meta http-equiv="cache-control" content="no-cache">
   <title>GoJS Change Log</title>
-  <!-- Copyright 1998-2020 by Northwoods Software Corporation. -->
+  <!-- Copyright 1998-2021 by Northwoods Software Corporation. -->
   <script>
     (function (i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
@@ -204,6 +204,133 @@
     </ul>
 
     <hr />
+    <h4 id="2.1.38">Changes for 2.1.38</h4>
+    <ul>
+      <li>
+        Fixed more Table Panel issues with stretched elements -- this includes fixing a regression from 2.1.37.
+      </li>
+      <li>
+        Fixed a regression from 2.1.37 only in Internet Explorer 11 involving Shadow DOM, which broke mouse events.
+      </li>
+    </ul>
+
+    <h4 id="2.1.37">Changes for 2.1.37</h4>
+    <ul>
+      <li>
+        Added an Introduction page about <a href="intro/testing.html">Testing</a> with Jest and with Cypress.
+      </li>
+      <li>
+        Fixed some scenarios with Table Panels not apportioning space correctly when elements stretched
+        and rows/columns had minimums or maximums set.
+      </li>
+      <li>
+        Fixed touch-dragging between Diagrams in frameworks that use a shadow DOM (like Angular).
+      </li>
+      <li>
+        Fixed routing invalidation of links to nodes in collapsed groups that have "...Sides" Spots.
+      </li>
+      <li>
+        Fixed shadows on unfilled <a>PathFigures</a> when a <a>GraphObject.fill</a> was set. This mostly presented itself when shadowing bezier or orthogonal Link paths.
+        This fix may cause Links with a Link Label to draw a shadow on the Link path where none was previously. If you do not want the Link path shaded, you must set
+        <a>GraphObject.shadowVisible</a> to <code>false</code> on the Link path Shape.
+      </li>
+    </ul>
+
+    <h4 id="2.1.36">Changes for 2.1.36</h4>
+    <ul>
+      <li>
+        Fixed "Graduated" Panels rendering of final tick mark in some cases where due to floating point errors
+        the tick mark was not drawn.
+      </li>
+      <li>
+        Fixed <a>Link.getLinkPointFromPoint</a> for some cases where the start point was inside the target port shape.
+      </li>
+      <li>
+        One can now avoid invalidating the routes of other links that connect the same pair of ports
+        when links between them are added or removed, by setting <a>Link.curviness</a> to a number such as zero.
+      </li>
+    </ul>
+
+    <h4 id="2.1.35">Changes for 2.1.35</h4>
+    <ul>
+      <li>
+        Fixed jitter that occurred when dragging between diagrams with a modifier key held down.
+      </li>
+      <li>
+        When dragging between diagrams, fixed the loss of routing of partly or fully disconnected reshaped links
+        that have TwoWay Bindings on "points", and fixed the positioning of multiple fully disconnected links.
+      </li>
+      <li>
+        Fixed a shadow-drawing bug that could occur when <a>Part.isShadowed</a> is false but <a>GraphObject.shadowVisible</a> is true.
+      </li>
+    </ul>
+
+    <h4 id="2.1.34">Changes for 2.1.34</h4>
+    <ul>
+      <li>
+        Improved performance for off-screen Adornments and Parts.
+      </li>
+      <li>
+        Fixed exception regarding Workers when running in a web Worker.
+      </li>
+    </ul>
+
+    <h4 id="2.1.33">Changes for 2.1.33</h4>
+    <ul>
+      <li>
+        Improved AvoidsNodes routing performance for many common cases.
+      </li>
+      <li>
+        Improved <a>ContextMenuTool.canStart</a> to return false for double or triple context clicks.
+      </li>
+    </ul>
+
+    <h4 id="2.1.32">Changes for 2.1.32</h4>
+    <ul>
+      <li>
+        Fixed auto-scrolling not to do so in the directions in which <a>Diagram.allowHorizontalScroll</a> and
+        <a>Diagram.allowVerticalScroll</a> disallow it.
+      </li>
+      <li>
+        Fixed the positioning of nodes and links when an animation is stopped during a drag that operates on the same Parts.
+      </li>
+      <li>
+        Fixed <a>Diagram.makeSvg</a> where the SVG would not include <a>Picture.source</a> in headless browsers.
+      </li>
+      <li>
+        Fixed Diagram initialization when no Diagram DIV is specified, but setting some properties expected one (such as <a>Diagram.scrollMargin</a>).
+      </li>
+    </ul>
+
+    <h4 id="2.1.31">Changes for 2.1.31</h4>
+    <ul>
+      <li>
+        Fixed a regression since 2.1.30 where the library might not load in React or Angular environments, and a TypeError would be thrown.
+      </li>
+      <li>
+        Fixed dragging of links connected with snapped nodes when the grid cell size was not an integer,
+        causing the links to slowly shift over time.
+      </li>
+      <li>
+        Fixed rendering of background in images drawn by <a>Diagram.makeImageData</a> when the whole page has been scaled to be less than 100%.
+      </li>
+      <li>
+        Fixed <a>Diagram.delayInitialization</a> when calling code that prompts the Diagram to update immediately afterwards.
+      </li>
+      <li>
+        Fixed premature routing of links in Groups that start off collapsed (with <a>Group.isSubGraphExpanded</a> set or bound to false).
+      </li>
+      <li>
+        Fixed animation that might revert some routes when the initial animation was turned off.
+      </li>
+      <li>
+        <a>Link.computeAdjusting</a> now only returns <a>Link,End</a> during animation only when routing is AvoidsNodes.
+      </li>
+      <li>
+        Fixed a regression since 2.1.29 where an <a>Overview</a> would not update with a newly set <a>Overview.observed</a> Diagram
+        and a newly displayed HTMLDivElement until some activity happened on that observed Diagram.
+      </li>
+    </ul>
 
     <h4 id="2.1.30">Changes for 2.1.30</h4>
     <ul>

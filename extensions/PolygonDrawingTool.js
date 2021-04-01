@@ -1,6 +1,6 @@
 "use strict";
 /*
-*  Copyright (C) 1998-2020 by Northwoods Software Corporation. All Rights Reserved.
+*  Copyright (C) 1998-2021 by Northwoods Software Corporation. All Rights Reserved.
 */
 
 // A custom Tool for drawing polygons or polylines
@@ -392,9 +392,9 @@ Object.defineProperty(PolygonDrawingTool.prototype, "temporaryShape", {
     if (this._temporaryShape !== val && val !== null) {
       val.name = "SHAPE";
       var panel = this._temporaryShape.panel;
-      panel.remove(this._temporaryShape);
+      if (panel !== null) panel.remove(this._temporaryShape);
       this._temporaryShape = val;
-      panel.add(this._temporaryShape);
+      if (panel !== null) panel.add(this._temporaryShape);
     }
   }
 });

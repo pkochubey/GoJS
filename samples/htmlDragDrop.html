@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Drag and Drop Example</title>
-  <!-- Copyright 1998-2020 by Northwoods Software Corporation. -->
+  <!-- Copyright 1998-2021 by Northwoods Software Corporation. -->
   <meta name="description" content="Use HTML5 drag-and-drop to implement dragging HTML elements onto a GoJS Diagram to create new nodes." />
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -94,7 +94,7 @@
 
         if (this === myDiagram.div) {
           var can = event.target;
-          var pixelratio = window.PIXELRATIO;
+          var pixelratio = myDiagram.computePixelRatio();
 
           // if the target is not the canvas, we may have trouble, so just quit:
           if (!(can instanceof HTMLCanvasElement)) return;
@@ -143,7 +143,7 @@
         // Dragging onto a Diagram
         if (this === myDiagram.div) {
           var can = event.target;
-          var pixelratio = window.PIXELRATIO;
+          var pixelratio = myDiagram.computePixelRatio();
 
           // if the target is not the canvas, we may have trouble, so just quit:
           if (!(can instanceof HTMLCanvasElement)) return;
@@ -182,7 +182,6 @@
         {
           "undoManager.isEnabled": true
         });
-      window.PIXELRATIO = myDiagram.computePixelRatio(); // constant needed to determine mouse coordinates on the canvas
 
       // define a simple Node template
       myDiagram.nodeTemplate =

@@ -1,4 +1,4 @@
-/* Copyright (C) 1998-2020 by Northwoods Software Corporation. All Rights Reserved. */
+/* Copyright (C) 1998-2021 by Northwoods Software Corporation. All Rights Reserved. */
 
 // Load necessary scripts:
 if (window.require) {
@@ -142,7 +142,7 @@ function goIntro() {
   // footer
   var footer = document.createElement("div");
   footer.className = "footer";
-  var msg = "Copyright &copy; 1998-2020 by Northwoods Software Corporation.";
+  var msg = "Copyright &copy; 1998-2021 by Northwoods Software Corporation.";
   if (window.go && go.version) {
     msg = "GoJS&reg; version " + go.version + ". " + msg;
   }
@@ -275,6 +275,7 @@ var myMenu = '\
       <li><a href="printing.html">Printing</a></li>\
       <li><a href="serverSideImages.html">Server-side Images</a></li>\
       <li><a href="nodeScript.html">GoJS in Node.js</a></li>\
+      <li><a href="testing.html">Testing</a></li>\
       <li><a href="storage.html">Storage</a></li>\
       <li><a href="performance.html">Performance</a></li>\
       <li><a href="source.html">Building from Source</a></li>\
